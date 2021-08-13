@@ -1,0 +1,94 @@
+{
+  "name": "danger-plugin-conventional-commitlint-gitlab-mr",
+  "description": "This plugin checks MR & commit titles following the conventional commit lint rules. ",
+  "author": {
+    "name": "Andie SAMADOULOUGOU",
+    "email": "Andie SAMADOULOUGOU"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AnderwanSAM/danger-plugin-conventional-commitlint-gitlab-mr.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AnderwanSAM/danger-plugin-conventional-commitlint-gitlab-mr/issues"
+  },
+  "homepage": "https://github.com/AnderwanSAM/danger-plugin-conventional-commitlint-gitlab-mr#readme",
+  "keywords": [
+    "danger",
+    "danger-plugin",
+    "gitlab",
+    "mr",
+    "squash "
+  ],
+  "version": "0.0.0-development",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "precommit": "lint-staged",
+    "commit": "git-cz",
+    "commitmsg": "validate-commit-msg",
+    "build": "tsc",
+    "test": "jest",
+    "predocs": "rm -rf docs/",
+    "docs": "esdoc -c .esdoc.json",
+    "prepublish": "npm run build",
+    "semantic-release": "semantic-release",
+    "prettier": "prettier",
+    "prettier-write": "npm run prettier -- --parser typescript --no-semi --trailing-comma es5 --write --print-width 120",
+    "prettier-project": "npm run prettier-write -- 'src/**/*.{ts,tsx}'",
+    "lint": "tslint \"src/**/*.ts\""
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^19.2.4",
+    "commitizen": "^2.9.6",
+    "cz-conventional-changelog": "^2.0.0",
+    "danger": "*",
+    "husky": "^0.13.3",
+    "jest": "^20.0.1",
+    "lint-staged": "^3.4.1",
+    "prettier": "^1.3.1",
+    "semantic-release": "^17.4.4",
+    "ts-jest": "^20.0.0",
+    "tslint": "^5.4.3",
+    "typescript": "^2.3.2",
+    "validate-commit-msg": "^2.12.1"
+  },
+  "optionalDependencies": {
+    "esdoc": "^0.5.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "lint-staged": {
+    "*.@(ts|tsx)": [
+      "tslint --fix",
+      "npm run prettier-write --",
+      "git add"
+    ]
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(.test)\\.(ts|tsx)$",
+    "testPathIgnorePatterns": [
+      "\\.snap$",
+      "<rootDir>/node_modules/"
+    ]
+  },
+  "dependencies": {
+    "@commitlint/config-conventional": "^13.1.0",
+    "@commitlint/lint": "^13.1.0"
+  }
+}
