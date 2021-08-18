@@ -6,7 +6,7 @@ export declare function message(message: string): void;
 export declare function warn(message: string): void;
 export declare function fail(message: string): void;
 // export declare function markdown(message: string): void
-
+let failsNumber = 0 
 
 
 export interface CommitlintPluginConfig {
@@ -44,8 +44,9 @@ export default async function check(rules: Rules,
   } else if (squashFlag=== false && commitsArrayLenght > 1){
     // If MR sqash flag is false & multiple commits - at least one commit must be correct
     for (const commit of danger.gitlab.commits) {
-      await lintCommitMessage(commit.message, rules, config.severity);
+      await lintMessage(commit.message, rules, config.severity, danger.gitlab.commits.length);
     }
+  //  await reportResult(danger.gitlab.commits, rules, config.severity);
 
   } else {
       await lintCommitMessage(danger.gitlab.commits[0].message, rules, config.severity)
@@ -77,3 +78,30 @@ async function lintCommitMessage(commitMessage, rules, severity) {
     }
   });
 }
+
+async function lintMessage(commitMessage, rules, severity, size) {
+  return lint.default(commitMessage, rules).then(report => {
+    if(!report.valid){ failsNumber +=1 }
+    if (!report.valid && failsNumber === size) {
+      let failureMessage = `There is a problem with the commit message\n> ${commitMessage}`;
+      report.errors.forEach(error => {
+        failureMessage = `${failureMessage}\n- ${error.message}`;
+      });
+      const failureMessageN = 'At least one commit message should be good. The commit messages have to be squashed for the checks to only be performed on the MR title'
+      switch (severity) {
+        case 'fail':
+          fail(failureMessageN);
+          break;
+        case 'warn':
+          warn(failureMessageN);
+          break;
+        case 'message':
+          message(failureMessageN);
+          break;
+        case 'disable':
+          break;
+      }
+    }
+  });
+}
+

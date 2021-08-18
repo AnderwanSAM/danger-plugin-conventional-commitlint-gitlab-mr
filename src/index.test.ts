@@ -108,12 +108,14 @@ describe('commitlint', () => {
       describe('with default config', () => {
         it('should generate a message and fail', async () => {
           await check(rules);
-          expect(global.fail).toHaveBeenCalledTimes(2);
+          expect(global.fail).toHaveBeenCalledTimes(1);
+          // expect(global.fail).toHaveBeenCalledWith(
+          //   //'At least one commit message should be good. The commit messages have to be squashed for the checks to only be performed on the MR title'
+          //  'There is a problem with the commit message\n> foo\n- subject may not be empty\n- type may not be empty'
+          // );
           expect(global.fail).toHaveBeenCalledWith(
-            'There is a problem with the commit message\n> foo\n- subject may not be empty\n- type may not be empty'
-          );
-          expect(global.fail).toHaveBeenCalledWith(
-            'There is a problem with the commit message\n> bar\n- subject may not be empty\n- type may not be empty'
+           // 'There is a problem with the commit message\n> bar\n- subject may not be empty\n- type may not be empty'
+           'At least one commit message should be good. The commit messages have to be squashed for the checks to only be performed on the MR title'
           );
         });
       });
