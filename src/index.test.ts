@@ -27,7 +27,7 @@ describe('commitlint', () => {
            gitlab: { 
              commits: [{ message: 'chore: foo' }], 
              mr : {
-               title: 'chore: foo',
+               title: 'Draft: Resolve "Add argus to artifactory" ',
                squash: false
              }
              } 
@@ -55,6 +55,7 @@ describe('commitlint', () => {
         it('should generate a message and fail', async () => {
           await check(rules);
           expect(global.fail).toHaveBeenCalledTimes(1);
+          expect(global.warn).toHaveBeenCalledTimes(0);
           expect(global.fail).toHaveBeenCalledWith(
             'There is a problem with the commit message\n> foo\n- subject may not be empty\n- type may not be empty'
           );
@@ -78,7 +79,7 @@ describe('commitlint', () => {
       beforeEach(() => {
         global.danger = {
           gitlab: {
-            commits: [{ message: 'chore: foo' }, { message: 'feat: bar' }],
+            commits: [{ message: 'chore: foo' }, { message: 'feat bar' }],
             mr : {
               title: 'chore: foo',
               squash: false
@@ -114,7 +115,7 @@ describe('commitlint', () => {
           //  'There is a problem with the commit message\n> foo\n- subject may not be empty\n- type may not be empty'
           // );
           expect(global.fail).toHaveBeenCalledWith(
-           // 'There is a problem with the commit message\n> bar\n- subject may not be empty\n- type may not be empty'
+           // s'There is a problem with the commit message\n> bar\n- subject may not be empty\n- type may not be empty'
            'At least one commit message should be good. The commit messages have to be squashed for the checks to only be performed on the MR title'
           );
         });
@@ -126,7 +127,7 @@ describe('commitlint', () => {
       beforeEach(() => {
         global.danger = {
           gitlab: {
-            commits: [{ message: 'chore: foo' }, { message: 'feat: bar' }],
+            commits: [{ message: 'chore foo' }, { message: 'feat bar' }],
             mr : {
               title: 'chore: foo',
               squash: true 

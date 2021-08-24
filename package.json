@@ -20,7 +20,7 @@
     "mr",
     "squash "
   ],
-  "version": "0.0.0-development",
+  "version": "2.0.0",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
   "scripts": {
@@ -28,7 +28,7 @@
     "commit": "git-cz",
     "commitmsg": "validate-commit-msg",
     "build": "tsc",
-    "test": "jest",
+    "test": "jest --coverage",
     "predocs": "rm -rf docs/",
     "docs": "esdoc -c .esdoc.json",
     "prepublish": "npm run build",
