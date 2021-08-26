@@ -77,14 +77,6 @@ async function lintCommitMessage(commitMessage, rules, severity) {
 }
 
 async function messageFailed(commitMessage, rules) {
-  console.info('lint')
-  console.info(lint)
-  console.info('lint default')
-  console.info(lint.default)
-  console.info('lint type')
-  console.info(typeof lint)
-  console.info('lint.default type')
-  console.info(typeof lint.default)
   return lint(commitMessage, rules).then(report => {
     if (!report.valid) {
       let failureMessage = `There is a problem with the commit message\n> ${commitMessage}`;
