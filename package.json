@@ -20,7 +20,7 @@
     "mr",
     "squash "
   ],
-  "version": "3.0.0",
+  "version": "3.0.1",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
   "scripts": {
