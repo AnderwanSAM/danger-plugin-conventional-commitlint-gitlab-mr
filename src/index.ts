@@ -39,11 +39,12 @@ export default async function check(rules: Rules,
 
   if (squashFlag === true && commitsArrayLenght > 1){
     // If MR sqash flag is true & multiple commits - title must be correct
-    await lintCommitMessage(danger.gitlab.mr.title, rules, config.severity)
+     await lintCommitMessage(danger.gitlab.mr.title, rules, config.severity)
 
   } else if (squashFlag=== false && commitsArrayLenght > 1){
     // If MR sqash flag is false & multiple commits - at least one commit must be correct
-    await  evalMessages(danger.gitlab.commits, rules, config.severity)
+   await  evalMessages(danger.gitlab.commits, rules, config.severity)
+   // await  messageLint(danger.gitlab.commits, rules, config.severity)
   } else {
       await lintCommitMessage(danger.gitlab.commits[0].message, rules, config.severity)
   }
@@ -76,6 +77,14 @@ async function lintCommitMessage(commitMessage, rules, severity) {
 }
 
 async function messageFailed(commitMessage, rules) {
+  console.info('lint')
+  console.info(lint)
+  console.info('lint default')
+  console.info(lint.default)
+  console.info('lint type')
+  console.info(typeof lint)
+  console.info('lint.default type')
+  console.info(typeof lint.default)
   return lint.default(commitMessage, rules).then(report => {
     if (!report.valid) {
       let failureMessage = `There is a problem with the commit message\n> ${commitMessage}`;
@@ -119,6 +128,35 @@ async function evalMessages(commits, rules, severity){
     
   }
   
+}
+
+
+async function messageLint(messages,rules,severity){
+  let tab : boolean [] = []
+  for (let i = 0 ; i < messages.length ; i ++){
+      const apromise = await lint.default(messages[i],rules).then((report)=>{
+          tab.push(report.valid)
+      })
+      
+  }
+  if(tab.every(isTrue)){
+      const failureMessage = 'At least one commit message must be good. The commit messages have to be squashed for the checks to only be performed on the MR title'
+      switch (severity) {
+          case 'fail':
+            fail(failureMessage);
+            break;
+          case 'warn':
+            warn(failureMessage);
+            break;
+          case 'message':
+            message(failureMessage);
+            break;
+          case 'disable':
+            break;
+        }
+  } else {
+      console.log('Ya')
+  }
 }
 
 
