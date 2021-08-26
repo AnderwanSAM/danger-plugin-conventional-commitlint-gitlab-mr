@@ -59,19 +59,7 @@ async function lintCommitMessage(commitMessage, rules, severity) {
       report.errors.forEach(error => {
         failureMessage = `${failureMessage}\n- ${error.message}`;
       });
-      switch (severity) {
-        case 'fail':
-          fail(failureMessage);
-          break;
-        case 'warn':
-          warn(failureMessage);
-          break;
-        case 'message':
-          message(failureMessage);
-          break;
-        case 'disable':
-          break;
-      }
+      reportFn(severity,failureMessage)
     }
   });
 }
@@ -103,52 +91,30 @@ async function evalMessages(commits, rules, severity){
   }
   if(tab.every(isTrue)){
       const failureMessage ='At least one commit message should be good. The commit messages have to be squashed for the checks to only be performed on the MR title'
-      switch (severity) {
-          case 'fail':
-            fail(failureMessage);
-            break;
-          case 'warn':
-            warn(failureMessage);
-            break;
-          case 'message':
-            message(failureMessage);
-            break;
-          case 'disable':
-            break;
-        }
+      reportFn(severity,failureMessage)
   } else {
     
   }
   
 }
 
+function reportFn(severity,failureMessage){
+  switch (severity) {
+    case 'fail':
+      fail(failureMessage);
+      break;
+    case 'warn':
+      warn(failureMessage);
+      break;
+    case 'message':
+      message(failureMessage);
+      break;
+    case 'disable':
+      break;
+  }
+}
 
-// async function messageLint(messages,rules,severity){
-//   let tab : boolean [] = []
-//   for (let i = 0 ; i < messages.length ; i ++){
-//       const apromise = await lint.default(messages[i],rules).then((report)=>{
-//           tab.push(report.valid)
-//       })
-      
-//   }
-//   if(tab.every(isTrue)){
-//       const failureMessage = 'At least one commit message must be good. The commit messages have to be squashed for the checks to only be performed on the MR title'
-//       switch (severity) {
-//           case 'fail':
-//             fail(failureMessage);
-//             break;
-//           case 'warn':
-//             warn(failureMessage);
-//             break;
-//           case 'message':
-//             message(failureMessage);
-//             break;
-//           case 'disable':
-//             break;
-//         }
-//   } else {
-//       console.log('Ya')
-//   }
-// }
+
+
 
 
