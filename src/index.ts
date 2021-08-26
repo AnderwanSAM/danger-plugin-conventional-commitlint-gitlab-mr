@@ -53,7 +53,7 @@ export default async function check(rules: Rules,
 }
 
 async function lintCommitMessage(commitMessage, rules, severity) {
-  return lint.default(commitMessage, rules).then(report => {
+  return lint(commitMessage, rules).then(report => {
     if (!report.valid) {
       let failureMessage = `There is a problem with the commit message\n> ${commitMessage}`;
       report.errors.forEach(error => {
@@ -123,32 +123,32 @@ async function evalMessages(commits, rules, severity){
 }
 
 
-async function messageLint(messages,rules,severity){
-  let tab : boolean [] = []
-  for (let i = 0 ; i < messages.length ; i ++){
-      const apromise = await lint.default(messages[i],rules).then((report)=>{
-          tab.push(report.valid)
-      })
+// async function messageLint(messages,rules,severity){
+//   let tab : boolean [] = []
+//   for (let i = 0 ; i < messages.length ; i ++){
+//       const apromise = await lint.default(messages[i],rules).then((report)=>{
+//           tab.push(report.valid)
+//       })
       
-  }
-  if(tab.every(isTrue)){
-      const failureMessage = 'At least one commit message must be good. The commit messages have to be squashed for the checks to only be performed on the MR title'
-      switch (severity) {
-          case 'fail':
-            fail(failureMessage);
-            break;
-          case 'warn':
-            warn(failureMessage);
-            break;
-          case 'message':
-            message(failureMessage);
-            break;
-          case 'disable':
-            break;
-        }
-  } else {
-      console.log('Ya')
-  }
-}
+//   }
+//   if(tab.every(isTrue)){
+//       const failureMessage = 'At least one commit message must be good. The commit messages have to be squashed for the checks to only be performed on the MR title'
+//       switch (severity) {
+//           case 'fail':
+//             fail(failureMessage);
+//             break;
+//           case 'warn':
+//             warn(failureMessage);
+//             break;
+//           case 'message':
+//             message(failureMessage);
+//             break;
+//           case 'disable':
+//             break;
+//         }
+//   } else {
+//       console.log('Ya')
+//   }
+// }
 
 
